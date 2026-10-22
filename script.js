@@ -29,10 +29,13 @@ document.querySelectorAll('[data-theme]').forEach(button => {
     image.alt = `Triggers ${dark ? 'dark' : 'light'} home screen with a reflection calendar, daily stats, and mascot`;
   });
 });
-// All three scenes loop automatically. Respect the device accessibility preference.
+// Native SwiftUI scene exports play automatically as infinitely looping APNGs.
+// Only the operating system reduced-motion preference substitutes still frames.
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 function syncMotion() {
-  document.querySelector('#mascot').src = reducedMotion.matches ? 'assets/mascot-still.png' : 'assets/mascot.gif';
+  document.querySelectorAll('[data-animation]').forEach(image => {
+    image.src = `assets/${image.dataset.animation}${reducedMotion.matches ? '-still' : ''}.png`;
+  });
 }
 syncMotion();
 reducedMotion.addEventListener('change', syncMotion);
